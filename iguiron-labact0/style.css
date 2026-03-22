@@ -1,0 +1,125 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f0fdf4; 
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    width: 600px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.header h2 {
+    color: #1f2937;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #6b7280;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+
+.input-section {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+#studentInput {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#studentInput:focus {
+    border-color: #0f766e;
+}
+
+button {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+#addBtn { background-color: #0f766e; }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    background-color: #ffffff; /* Default background */
+}
+
+/* Name and Status Text Wrapper */
+.name-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.student-name {
+    font-size: 15px;
+    color: #374151;
+}
+
+.status-text {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Status Text Colors */
+.text-present { color: #2563eb; }
+.text-absent { color: #f59e0b; }
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-present { background-color: #2563eb; }
+.btn-absent { background-color: #f59e0b; }
+.btn-remove { background-color: #dc2626; }
+
+.is-present {
+    background-color: #f0f6ff;
+}
+
+.is-absent {
+    background-color: #fffbeb;
+}
