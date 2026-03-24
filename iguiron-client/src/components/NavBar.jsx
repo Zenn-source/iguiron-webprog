@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import Logo from "./Logo";
 
 const links = [
   { label: "Home", to: "/" },
@@ -8,23 +9,22 @@ const links = [
 
 const navLinkClassName = ({ isActive }) =>
   [
-    "rounded-full border-2 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] transition",
+    "px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] transition-all duration-200",
     isActive
-      ? "border-zinc-900 bg-zinc-900 text-zinc-50"
-      : "border-transparent text-zinc-500 hover:border-zinc-900 hover:bg-zinc-50 hover:text-zinc-900",
+      ? "text-zinc-900 border-b-2 border-zinc-900"
+      : "text-zinc-600 border-b-2 border-transparent hover:text-zinc-900 hover:border-zinc-300",
   ].join(" ");
 
 const NavBar = () => {
   return (
-    <header className="fixed inset-x-0 top-0 border-b-2 border-zinc-900 bg-zinc-100/95 backdrop-blur">
-      <div className="flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <NavLink to="/" className="flex items-center gap-3">
-          <div className="space-y-0.5">
-            <p className="text-xl font-bold text-zinc-900">LOGO HERE</p>
-          </div>
+    <header className="fixed inset-x-0 top-0 border-b-2 border-zinc-200 bg-white/95 backdrop-blur-sm shadow-sm z-50">
+      <div className="flex w-full items-center justify-between gap-6 px-4 py-3 sm:px-6 lg:px-8">
+        <NavLink to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Logo size={32} className="text-zinc-900" />
+          <span className="hidden sm:inline text-sm font-bold text-zinc-900">IGUIRON</span>
         </NavLink>
 
-        <nav className="hidden items-center gap-2 md:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           {links.map((link) => (
             <NavLink
               key={link.to}
