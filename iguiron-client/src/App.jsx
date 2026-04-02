@@ -4,24 +4,31 @@ import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ArticlePage from "./pages/ArticlePage";
+import ArticleListPage from "./pages/ArticleListPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const routes = [
   {
     path: "/",
     element: <Layout />,
+    errorElement: <NotFoundPage />,
     children: [
       {
-        path: "",
+        path: "/",
         element: <HomePage />,
       },
       {
-        path: "about",
+        path: "/about",
         element: <AboutPage />,
       },
       {
-        path: "articles",
+        path: "/articles",
+        element: <ArticleListPage />
+      },
+      {
+        path: "/articles/:name",
         element: <ArticlePage />
-      }
+      },
     ],
   },
 ];
@@ -35,4 +42,4 @@ function App() {
     </>
   )
 }
-export default App
+export default App;
