@@ -29,6 +29,7 @@ const routes = [
         path: "/articles/:name",
         element: <ArticlePage />
       },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ];
