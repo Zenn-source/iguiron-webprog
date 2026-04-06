@@ -7,17 +7,19 @@ const ArticleList = ({ articles }) => {
       {articles.map((article, index) => (
         <article
           key={article.name}
-          className="rounded-3xl border-2 border-zinc-900 bg-zinc-100 p-4">
-          <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] bg-zinc-900">
-            <div className="h-12 w-12 border-2 border-zinc-300 bg-zinc-100"></div>
-          </div>
-          <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-500">
+          className="rounded-3xl border-2 border-[#9494CF] bg-white p-4">
+          <img
+            src={article.image}
+            alt={article.title}
+            className="aspect-4/3 w-full rounded-[1.25rem] object-cover"
+          />
+          <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8888C0]">
             Article {String(index + 1).padStart(2, "0")}
           </p>
-          <h3 className="mt-2 text-lg font-semibold text-zinc-900">
+          <h3 className="mt-2 text-lg font-semibold text-stone-900">
             {article.title}
           </h3>
-          <p className="mt-3 text-sm leading-6 text-zinc-600">
+          <p className="mt-3 text-sm leading-6 text-stone-600">
             {article.content[0].substring(0, 150)}...
           </p>
           <Link to={`/articles/${article.name}`}>
