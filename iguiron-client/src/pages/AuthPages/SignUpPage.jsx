@@ -29,7 +29,7 @@ const SignUpPage = () => {
             <input
               id="first-name"
               type="text"
-              placeholder="Placeholder"
+              placeholder="Juan"
               autoComplete="given-name"
               className={inputClasses}
             />
@@ -43,7 +43,7 @@ const SignUpPage = () => {
             <input
               id="last-name"
               type="text"
-              placeholder="Placeholder"
+              placeholder="Dela Cruz"
               autoComplete="family-name"
               className={inputClasses}
             />
@@ -59,7 +59,7 @@ const SignUpPage = () => {
           <input
             id="signup-email"
             type="email"
-            placeholder="Placeholder"
+            placeholder="juandelacruz@gmail.com"
             autoComplete="email"
             className={inputClasses}
           />
@@ -74,7 +74,7 @@ const SignUpPage = () => {
           <input
             id="signup-password"
             type="password"
-            placeholder="Placeholder"
+            placeholder="1234abcd!@#$"
             autoComplete="new-password"
             className={inputClasses}
           />

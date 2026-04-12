@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import Logo from "./Logo";
 
 const links = [
@@ -35,6 +35,12 @@ const NavBar = () => {
             </NavLink>
           ))}
         </nav>
+
+        <Link
+          to="/auth/signin"
+          className="hidden md:inline-flex items-center px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] rounded-lg bg-[#6B6BAF] text-white transition-colors hover:bg-[#7070E5]">
+          Sign In
+        </Link>
       </div>
     </header>
   );
