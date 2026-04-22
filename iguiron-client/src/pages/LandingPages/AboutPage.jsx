@@ -28,7 +28,7 @@ const metrics = [
 const AboutPage = () => {
   return (
     <div className="flex w-full flex-col gap-6">
-      <section className="border-y-2 border-[#ADADD8] bg-white/30 backdrop-blur-sm px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div className="rounded-3xl border-2 border-[#ADADD8] bg-white/50 p-6">
             <img
@@ -62,7 +62,7 @@ const AboutPage = () => {
       </section>
 
       {/* Metrics Section */}
-      <section className="border-y-2 border-[#ADADD8] bg-white/30 backdrop-blur-sm px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className="border-y-2 border-[#8888C0] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-6">
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#8888C0]">
             Impact
@@ -89,7 +89,7 @@ const AboutPage = () => {
       </section>
 
       {/* Experience & Background Section */}
-      <section className="border-y-2 border-[#ADADD8] bg-white/30 backdrop-blur-sm px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className=" px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#8888C0]">
