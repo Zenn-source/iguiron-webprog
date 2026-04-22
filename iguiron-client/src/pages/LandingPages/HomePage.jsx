@@ -52,7 +52,7 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="rounded-3xl border-2 border-dashed border-[#ADADD8] bg-white/50 p-6">
+          <div className="rounded-3xl border-2 border-[#ADADD8] bg-white/50 p-6">
             <div className="relative min-h-65 overflow-hidden rounded-[1.25rem] bg-[#C5C5E8]">
               <img
                 src="/example.jpeg"
