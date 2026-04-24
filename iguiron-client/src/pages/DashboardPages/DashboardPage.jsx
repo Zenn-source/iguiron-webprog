@@ -100,6 +100,7 @@ function DashboardPage() {
           xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band', label: 'Quarters' }]}
           title="Quarterly Sales"
         />
+        
         <PieChart
           series={[
             {
