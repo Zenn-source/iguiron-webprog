@@ -9,12 +9,12 @@ function ArticlePage() {
   if (!article) {
     return (
       <div className="flex w-full flex-col gap-6">
-        <section className="border-y-2 border-[#ADADD8] bg-white/30 backdrop-blur-sm px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <section className="border-y border-[#3e484f] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
           <div className="mx-auto max-w-3xl">
-            <h1 className="text-3xl font-bold text-stone-900">
+            <h1 className="text-[30px] font-semibold leading-[1.3] text-[#dae2fd]">
               Article not found
             </h1>
-            <Button to="/articles" className="mt-6">
+            <Button to="/articles" variant="secondary" className="mt-6">
               Back to Articles
             </Button>
           </div>
@@ -25,18 +25,20 @@ function ArticlePage() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <section className="border-y-2 border-[#ADADD8] bg-white/30 backdrop-blur-sm px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className="border-b border-[#3e484f] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <div className="max-w-3xl">
           <div className="mb-4">
-            <Button to="/articles">Back to Articles</Button>
+            <Button to="/articles" variant="secondary">
+              Back to Articles
+            </Button>
           </div>
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#8888C0]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.05em] text-[#8ed5ff]">
             Article
           </p>
-          <h1 className="text-3xl font-bold leading-tight text-stone-900 sm:text-4xl">
+          <h1 className="text-[40px] font-bold leading-[1.2] tracking-[-0.02em] text-[#dae2fd] sm:text-5xl">
             {article.title}
           </h1>
-          <p className="mt-2 text-sm text-[#8888C0]">
+          <p className="mt-2 text-sm text-[#87929a]">
             {article.name
               .split("-")
               .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -45,26 +47,28 @@ function ArticlePage() {
         </div>
       </section>
 
-      <section className="border-y-2 border-[#ADADD8] bg-white/30 backdrop-blur-sm px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className="px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <img
             src={article.image}
             alt={article.title}
-            className="mb-8 w-full rounded-[1.25rem] object-cover"
+            className="mb-8 w-full rounded-2xl object-cover"
           />
 
           <div className="space-y-4">
             {article.content.map((paragraph, index) => (
               <p
                 key={index}
-                className="text-base leading-7 text-stone-700 whitespace-pre-wrap">
+                className="text-base leading-[1.6] text-[#bdc8d1] whitespace-pre-wrap">
                 {paragraph}
               </p>
             ))}
           </div>
 
-          <div className="mt-8 border-t-2 border-[#ADADD8] pt-6">
-            <Button to="/articles">Back to Articles</Button>
+          <div className="mt-8 border-t border-[#3e484f] pt-6">
+            <Button to="/articles" variant="secondary">
+              Back to Articles
+            </Button>
           </div>
         </div>
       </section>

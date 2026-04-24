@@ -2,20 +2,18 @@ import { Link } from "react-router-dom";
 import Button from "../../components/Button";
 
 const inputClasses =
-  "mt-2 w-full rounded-xl border border-zinc-300 bg-zinc-100 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-zinc-50";
+  "mt-2 w-full rounded-lg border border-[#3e484f] bg-[#060e20] px-4 py-3 text-sm text-[#dae2fd] outline-none transition placeholder:text-[#87929a] focus:border-[#8ed5ff]";
 
-const actionButtonClassName =
-  "w-full rounded-xl py-3 text-[11px] tracking-[0.2em]";
+const actionButtonClasses = "w-full py-3 text-sm";
 
 const SignUpPage = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
+      <h1 className="text-[40px] font-bold leading-[1.2] tracking-[-0.02em] text-[#dae2fd]">
         Sign Up
       </h1>
-      <p className="mt-3 text-sm leading-6 text-zinc-600">
-        Create your account with the same monochrome layout pattern and shared
-        button treatment.
+      <p className="mt-3 text-base leading-[1.6] text-[#bdc8d1]">
+        Create your account to get started.
       </p>
 
       <form className="mt-8 space-y-5">
@@ -23,7 +21,7 @@ const SignUpPage = () => {
           <div>
             <label
               htmlFor="first-name"
-              className="text-sm font-medium text-zinc-700">
+              className="text-sm font-medium text-[#bdc8d1]">
               First Name
             </label>
             <input
@@ -37,7 +35,7 @@ const SignUpPage = () => {
           <div>
             <label
               htmlFor="last-name"
-              className="text-sm font-medium text-zinc-700">
+              className="text-sm font-medium text-[#bdc8d1]">
               Last Name
             </label>
             <input
@@ -53,7 +51,7 @@ const SignUpPage = () => {
         <div>
           <label
             htmlFor="signup-email"
-            className="text-sm font-medium text-zinc-700">
+            className="text-sm font-medium text-[#bdc8d1]">
             Email
           </label>
           <input
@@ -68,7 +66,7 @@ const SignUpPage = () => {
         <div>
           <label
             htmlFor="signup-password"
-            className="text-sm font-medium text-zinc-700">
+            className="text-sm font-medium text-[#bdc8d1]">
             Password
           </label>
           <input
@@ -78,7 +76,7 @@ const SignUpPage = () => {
             autoComplete="new-password"
             className={inputClasses}
           />
-          <p className="mt-2 text-xs leading-5 text-zinc-500">
+          <p className="mt-2 text-xs leading-5 text-[#87929a]">
             Use a secure password with letters, numbers, and symbols.
           </p>
         </div>
@@ -86,7 +84,7 @@ const SignUpPage = () => {
         <Button
           type="submit"
           variant="primary"
-          className={actionButtonClassName}>
+          className={actionButtonClasses}>
           Create Account
         </Button>
 
@@ -94,23 +92,23 @@ const SignUpPage = () => {
           <Button
             type="button"
             variant="secondary"
-            className={actionButtonClassName}>
+            className={actionButtonClasses}>
             Sign Up with Google
           </Button>
           <Button
             type="button"
             variant="secondary"
-            className={actionButtonClassName}>
+            className={actionButtonClasses}>
             Sign Up with Apple
           </Button>
         </div>
       </form>
 
-      <div className="mt-8 border-t border-zinc-200 pt-6 text-sm text-zinc-600">
+      <div className="mt-8 border-t border-[#3e484f] pt-6 text-sm text-[#bdc8d1]">
         Already have an account?{" "}
         <Link
           to="/auth/signin"
-          className="font-semibold text-zinc-900 transition hover:text-zinc-600">
+          className="font-semibold text-[#8ed5ff] transition hover:text-[#7bd0ff]">
           Log In
         </Link>
       </div>

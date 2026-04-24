@@ -9,19 +9,19 @@ const links = [
 
 const navLinkClassName = ({ isActive }) =>
   [
-    "px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] transition-all duration-200",
+    "px-1 py-2 text-sm font-medium tracking-[0.01em] transition-colors duration-200",
     isActive
-      ? "text-stone-900 border-b-2 border-[#6B6BAF]"
-      : "text-stone-500 border-b-2 border-transparent hover:text-stone-900 hover:border-[#9494CF]",
+      ? "text-[#dae2fd] border-b-2 border-[#8ed5ff]"
+      : "text-[#bdc8d1] border-b-2 border-transparent hover:text-[#dae2fd]",
   ].join(" ");
 
 const NavBar = () => {
   return (
-    <header className="fixed inset-x-0 top-0 border-b-2 border-[#C5C5E8] bg-white/95 backdrop-blur-sm shadow-sm z-50">
+    <header className="fixed inset-x-0 top-0 border-b border-[#3e484f] bg-[#0b1326]/95 backdrop-blur-sm z-50">
       <div className="flex w-full items-center justify-between gap-6 px-4 py-3 sm:px-6 lg:px-8">
         <NavLink to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <Logo size={32} className="text-[#6B6BAF]" />
-          <span className="hidden sm:inline text-sm font-bold text-stone-900">IGUIRON</span>
+          <Logo size={32} className="text-[#8ed5ff]" />
+          <span className="hidden sm:inline text-sm font-bold text-[#dae2fd] tracking-wide">IGUIRON</span>
         </NavLink>
 
         <nav className="hidden items-center gap-6 md:flex">
@@ -38,7 +38,7 @@ const NavBar = () => {
 
         <Link
           to="/auth/signin"
-          className="hidden md:inline-flex items-center px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] rounded-lg bg-[#6B6BAF] text-white transition-colors hover:bg-[#7070E5]">
+          className="hidden md:inline-flex items-center px-4 py-2 text-sm font-medium tracking-[0.01em] rounded-lg bg-[#8ed5ff] text-[#00354a] transition-colors hover:bg-[#7bd0ff]">
           Sign In
         </Link>
       </div>

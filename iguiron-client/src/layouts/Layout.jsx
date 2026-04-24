@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 const Layout = () => {
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#EEEEEE] from-0% via-[#A6A6D9] via-75% to-[#7070E5] text-stone-900">
+    <div className="flex min-h-screen flex-col bg-[#0b1326] text-[#dae2fd]">
       <NavBar />
       <main className="flex-1 pt-20">
         <Outlet />

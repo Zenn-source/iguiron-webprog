@@ -7,24 +7,28 @@ const ArticleList = ({ articles }) => {
       {articles.map((article, index) => (
         <article
           key={article.name}
-          className="rounded-3xl border-2 border-[#9494CF] bg-white p-4">
+          className="overflow-hidden rounded-2xl border border-white/[8%] bg-[#171f33]">
           <img
             src={article.image}
             alt={article.title}
-            className="aspect-4/3 w-full rounded-[1.25rem] object-cover"
+            className="aspect-4/3 w-full object-cover"
           />
-          <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8888C0]">
-            Article {String(index + 1).padStart(2, "0")}
-          </p>
-          <h3 className="mt-2 text-lg font-semibold text-stone-900">
-            {article.title}
-          </h3>
-          <p className="mt-3 text-sm leading-6 text-stone-600">
-            {article.content[0].substring(0, 150)}...
-          </p>
-          <Link to={`/articles/${article.name}`}>
-            <Button className="mt-4">Read More</Button>
-          </Link>
+          <div className="p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.05em] text-[#8ed5ff]">
+              Article {String(index + 1).padStart(2, "0")}
+            </p>
+            <h3 className="mt-2 text-[24px] font-semibold leading-[1.4] text-[#dae2fd]">
+              {article.title}
+            </h3>
+            <p className="mt-2 text-sm leading-[1.5] text-[#bdc8d1]">
+              {article.content[0].substring(0, 150)}...
+            </p>
+            <Link to={`/articles/${article.name}`}>
+              <Button className="mt-4" variant="link">
+                Read More →
+              </Button>
+            </Link>
+          </div>
         </article>
       ))}
     </div>
