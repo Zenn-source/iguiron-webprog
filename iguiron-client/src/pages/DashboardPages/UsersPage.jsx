@@ -2,31 +2,14 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: 'firstName',
-    headerName: 'First name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
+  { field: 'firstName', headerName: 'First name', width: 150, editable: true },
+  { field: 'lastName', headerName: 'Last name', width: 150, editable: true },
+  { field: 'age', headerName: 'Age', type: 'number', width: 110, editable: true },
   {
     field: 'fullName',
     headerName: 'Full name',
@@ -55,45 +38,43 @@ const averageAge = (validAges.reduce((sum, r) => sum + r.age, 0) / validAges.len
 function UsersPage() {
   return (
     <>
-      <Typography variant="h4" gutterBottom>
-        Users
-      </Typography>
+      <Typography variant="h4" gutterBottom>Users</Typography>
 
-      {/* Summary Cards */}
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mb: 4 }}>
-        <Card>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 2 }}>
+
+        {/* Stat: Total Users */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
           <CardContent>
-            <Typography variant="h6">Total Users</Typography>
-            <Typography variant="h4">{rows.length}</Typography>
+            <Typography variant="overline" color="text.secondary">Total Users</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{rows.length}</Typography>
           </CardContent>
         </Card>
-        <Card>
+
+        {/* Stat: Average Age */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
           <CardContent>
-            <Typography variant="h6">Average Age</Typography>
-            <Typography variant="h4">{averageAge}</Typography>
+            <Typography variant="overline" color="text.secondary">Average Age</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{averageAge}</Typography>
           </CardContent>
         </Card>
-      </Stack>
 
-      {/* DataGrid */}
-      <Typography variant="h5" gutterBottom>
-        Users Overview
-      </Typography>
-      <Box sx={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-          checkboxSelection
-          disableRowSelectionOnClick
-        />
+        {/* DataGrid */}
+        <Card sx={{ gridColumn: 'span 12' }}>
+          <CardContent>
+            <Typography variant="overline" color="text.secondary">Users Overview</Typography>
+            <Box sx={{ height: 500, width: '100%', mt: 1 }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
+                pageSizeOptions={[5]}
+                checkboxSelection
+                disableRowSelectionOnClick
+              />
+            </Box>
+          </CardContent>
+        </Card>
+
       </Box>
     </>
   );

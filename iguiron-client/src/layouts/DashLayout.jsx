@@ -1,6 +1,46 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { styled, useTheme, alpha } from '@mui/material/styles';
+import { styled, useTheme, alpha, createTheme, ThemeProvider } from '@mui/material/styles';
+
+const dashTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: { main: '#8ed5ff', contrastText: '#00354a' },
+    background: { default: '#0b1326', paper: '#171f33' },
+    text: { primary: '#dae2fd', secondary: '#bdc8d1', disabled: '#87929a' },
+    divider: '#3e484f',
+  },
+  typography: { fontFamily: '"Inter", sans-serif' },
+  shape: { borderRadius: 12 },
+  components: {
+    MuiPaper: { styleOverrides: { root: { backgroundImage: 'none' } } },
+    MuiCard: {
+      styleOverrides: {
+        root: { backgroundImage: 'none', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px' },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: { backgroundColor: '#131b2e', borderBottom: '1px solid #3e484f', boxShadow: 'none', backgroundImage: 'none' },
+      },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: { backgroundColor: '#0b1326', borderRight: '1px solid #3e484f', backgroundImage: 'none' },
+      },
+    },
+    MuiDivider: { styleOverrides: { root: { borderColor: '#3e484f' } } },
+    MuiButton: {
+      styleOverrides: {
+        outlinedInherit: {
+          borderColor: '#3e484f',
+          color: '#bdc8d1',
+          '&:hover': { borderColor: '#8ed5ff', color: '#8ed5ff', backgroundColor: 'rgba(142, 213, 255, 0.05)' },
+        },
+      },
+    },
+  },
+});
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -176,6 +216,7 @@ const DashLayout = () => {
   };
 
   return (
+    <ThemeProvider theme={dashTheme}>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       {/* App Bar */}
@@ -230,16 +271,25 @@ const DashLayout = () => {
         <Divider />
         {/* Drawer List */}
         <List>
-          {dashboardNavItems.map(({ label, to, icon: Icon }) => (
-            <ListItem key={to} disablePadding sx={{ display: "block" }}>
+          {dashboardNavItems.map(({ label, to, icon: NavIcon }) => (
+            <ListItem key={to} disablePadding sx={{ display: "block", px: 1 }}>
               <ListItemButton
                 component={Link}
                 to={to}
                 selected={location.pathname === to}
                 sx={{
                   minHeight: 48,
-                  px: 2.5,
+                  px: 2,
+                  borderRadius: '8px',
                   justifyContent: open ? 'initial' : 'center',
+                  color: 'text.secondary',
+                  '&.Mui-selected': {
+                    bgcolor: 'rgba(142, 213, 255, 0.1)',
+                    color: '#8ed5ff',
+                    '& .MuiListItemIcon-root': { color: '#8ed5ff' },
+                    '&:hover': { bgcolor: 'rgba(142, 213, 255, 0.15)' },
+                  },
+                  '&:hover': { bgcolor: 'rgba(218, 226, 253, 0.05)', color: 'text.primary' },
                 }}
               >
                 <ListItemIcon
@@ -247,9 +297,10 @@ const DashLayout = () => {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color: 'inherit',
                   }}
                 >
-                  <Icon />
+                  <NavIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary={label}
@@ -260,12 +311,13 @@ const DashLayout = () => {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: 'background.default', minHeight: '100vh' }}>
         <DrawerHeader />
         {/* Content */}
         <Outlet />
       </Box>
     </Box>
+    </ThemeProvider>
   );
 };
 

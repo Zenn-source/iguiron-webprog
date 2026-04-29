@@ -2,7 +2,6 @@ import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Gauge } from '@mui/x-charts/Gauge';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
@@ -22,69 +21,77 @@ const distributionData = [
 function ReportsPage() {
   return (
     <>
-      <Typography variant="h4" gutterBottom>
-        Reports
-      </Typography>
+      <Typography variant="h4" gutterBottom>Reports</Typography>
 
-      {/* Summary Cards */}
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mb: 4 }}>
-        <Card>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 2 }}>
+
+        {/* Stat: Total Revenue */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 4' } }}>
           <CardContent>
-            <Typography variant="h6">Total Revenue</Typography>
-            <Typography variant="h4">$48,295</Typography>
+            <Typography variant="overline" color="text.secondary">Total Revenue</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>$48,295</Typography>
           </CardContent>
         </Card>
-        <Card>
+
+        {/* Stat: Growth Rate */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 4' } }}>
           <CardContent>
-            <Typography variant="h6">Growth Rate</Typography>
-            <Typography variant="h4">+12.5%</Typography>
+            <Typography variant="overline" color="text.secondary">Growth Rate</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>+12.5%</Typography>
           </CardContent>
         </Card>
-        <Card>
+
+        {/* Stat: Active Projects */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 4' } }}>
           <CardContent>
-            <Typography variant="h6">Active Projects</Typography>
-            <Typography variant="h4">7</Typography>
+            <Typography variant="overline" color="text.secondary">Active Projects</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>7</Typography>
           </CardContent>
         </Card>
-      </Stack>
 
-      {/* Gauges */}
-      <Typography variant="h5" gutterBottom>
-        Performance Metrics
-      </Typography>
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} sx={{ mb: 4 }}>
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" gutterBottom>Completion Rate</Typography>
-          <Gauge width={150} height={150} value={75} />
-        </Box>
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" gutterBottom>Target Progress</Typography>
-          <Gauge width={150} height={150} value={50} valueMin={10} valueMax={60} />
-        </Box>
-      </Stack>
+        {/* Gauge: Completion Rate */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
+          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography variant="overline" color="text.secondary">Completion Rate</Typography>
+            <Gauge width={150} height={150} value={75} sx={{ mt: 1 }} />
+          </CardContent>
+        </Card>
 
-      {/* Bar Chart */}
-      <Typography variant="h5" gutterBottom>
-        Quarterly Performance
-      </Typography>
-      <Box sx={{ mb: 4 }}>
-        <BarChart
-          series={quarterlyData}
-          height={290}
-          xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band', label: 'Quarters' }]}
-        />
-      </Box>
+        {/* Gauge: Target Progress */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
+          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography variant="overline" color="text.secondary">Target Progress</Typography>
+            <Gauge width={150} height={150} value={50} valueMin={10} valueMax={60} sx={{ mt: 1 }} />
+          </CardContent>
+        </Card>
 
-      {/* Pie Chart */}
-      <Typography variant="h5" gutterBottom>
-        Distribution
-      </Typography>
-      <Box sx={{ mb: 4 }}>
-        <PieChart
-          series={[{ data: distributionData }]}
-          width={400}
-          height={200}
-        />
+        {/* Bar Chart */}
+        <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 8' } }}>
+          <CardContent>
+            <Typography variant="overline" color="text.secondary">Quarterly Performance</Typography>
+            <Box sx={{ width: '100%', mt: 1 }}>
+              <BarChart
+                series={quarterlyData}
+                height={280}
+                xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band', label: 'Quarters' }]}
+              />
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Pie Chart */}
+        <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
+          <CardContent>
+            <Typography variant="overline" color="text.secondary">Distribution</Typography>
+            <Box sx={{ width: '100%', mt: 1 }}>
+              <PieChart
+                series={[{ data: distributionData }]}
+                height={260}
+              />
+            </Box>
+          </CardContent>
+        </Card>
+
       </Box>
     </>
   );
