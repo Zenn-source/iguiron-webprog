@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "firstName": "Maria",
+    "lastName": "Santos",
+    "username": "mariasantos",
+    "email": "maria.santos@mail.com",
+    "role": "Admin",
+    "status": "Active",
+    "age": 32,
+    "gender": "Female",
+    "contactNumber": "09171234567"
+  },
+  {
+    "id": 2,
+    "firstName": "Juan",
+    "lastName": "Dela Cruz",
+    "username": "juandc",
+    "email": "juan.delacruz@mail.com",
+    "role": "Admin",
+    "status": "Active",
+    "age": 28,
+    "gender": "Male",
+    "contactNumber": "09281234567"
+  },
+  {
+    "id": 3,
+    "firstName": "Ana",
+    "lastName": "Reyes",
+    "username": "anareyes",
+    "email": "ana.reyes@mail.com",
+    "role": "Editor",
+    "status": "Active",
+    "age": 25,
+    "gender": "Female",
+    "contactNumber": "09391234567"
+  },
+  {
+    "id": 4,
+    "firstName": "Carlo",
+    "lastName": "Mendoza",
+    "username": "carlomendoza",
+    "email": "carlo.mendoza@mail.com",
+    "role": "Editor",
+    "status": "Active",
+    "age": 30,
+    "gender": "Male",
+    "contactNumber": "09471234567"
+  },
+  {
+    "id": 5,
+    "firstName": "Liza",
+    "lastName": "Garcia",
+    "username": "lizagarcia",
+    "email": "liza.garcia@mail.com",
+    "role": "Editor",
+    "status": "Inactive",
+    "age": 27,
+    "gender": "Female",
+    "contactNumber": "09551234567"
+  },
+  {
+    "id": 6,
+    "firstName": "Mark",
+    "lastName": "Torres",
+    "username": "marktorres",
+    "email": "mark.torres@mail.com",
+    "role": "User",
+    "status": "Active",
+    "age": 22,
+    "gender": "Male",
+    "contactNumber": "09661234567"
+  },
+  {
+    "id": 7,
+    "firstName": "Nina",
+    "lastName": "Flores",
+    "username": "ninaflores",
+    "email": "nina.flores@mail.com",
+    "role": "User",
+    "status": "Active",
+    "age": 24,
+    "gender": "Female",
+    "contactNumber": "09771234567"
+  },
+  {
+    "id": 8,
+    "firstName": "Ryan",
+    "lastName": "Castillo",
+    "username": "ryancastillo",
+    "email": "ryan.castillo@mail.com",
+    "role": "User",
+    "status": "Inactive",
+    "age": 35,
+    "gender": "Male",
+    "contactNumber": "09881234567"
+  },
+  {
+    "id": 9,
+    "firstName": "Sofia",
+    "lastName": "Villanueva",
+    "username": "sofiavillanueva",
+    "email": "sofia.villanueva@mail.com",
+    "role": "User",
+    "status": "Active",
+    "age": 29,
+    "gender": "Female",
+    "contactNumber": "09911234567"
+  },
+  {
+    "id": 10,
+    "firstName": "Luis",
+    "lastName": "Ramos",
+    "username": "luisramos",
+    "email": "luis.ramos@mail.com",
+    "role": "User",
+    "status": "Inactive",
+    "age": 31,
+    "gender": "Male",
+    "contactNumber": "09021234567"
+  }
+]
