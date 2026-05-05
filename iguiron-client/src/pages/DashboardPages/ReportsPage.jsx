@@ -1,93 +1,133 @@
-import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { Gauge } from '@mui/x-charts/Gauge';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import PrintIcon from '@mui/icons-material/Print';
+import usersData from '../../data/users.json';
 
-const quarterlyData = [
-  { data: [35, 44, 24, 34], label: 'Series 1' },
-  { data: [51, 6, 49, 30], label: 'Series 2' },
-];
+const totalUsers = usersData.length;
+const activeUsers = usersData.filter((u) => u.status === 'Active').length;
+const adminCount = usersData.filter((u) => u.role === 'Admin').length;
+const editorCount = usersData.filter((u) => u.role === 'Editor').length;
+const userCount = usersData.filter((u) => u.role === 'User').length;
 
-const distributionData = [
-  { id: 0, value: 10, label: 'Series A' },
-  { id: 1, value: 15, label: 'Series B' },
-  { id: 2, value: 20, label: 'Series C' },
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+const monthlySignups = [1, 2, 1, 2, 2, 2];
+const monthlyActive = [1, 1, 1, 2, 1, 2];
+
+const roleDistribution = [
+  { id: 0, value: adminCount, label: 'Admin' },
+  { id: 1, value: editorCount, label: 'Editor' },
+  { id: 2, value: userCount, label: 'User' },
 ];
 
 function ReportsPage() {
   return (
     <>
-      <Typography variant="h4" gutterBottom>Reports</Typography>
+      <GlobalStyles styles={`
+        @media print {
+          .MuiAppBar-root,
+          .MuiDrawer-root,
+          .no-print {
+            display: none !important;
+          }
+        }
+      `} />
+
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+        <Typography variant="h4">Reports Summary</Typography>
+        <Button
+          className="no-print"
+          variant="outlined"
+          startIcon={<PrintIcon />}
+          onClick={() => window.print()}
+        >
+          Print Report
+        </Button>
+      </Box>
 
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 2 }}>
 
-        {/* Stat: Total Revenue */}
-        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 4' } }}>
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Total Revenue</Typography>
-            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>$48,295</Typography>
+            <Typography variant="overline" color="text.secondary">Total Users</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{totalUsers}</Typography>
           </CardContent>
         </Card>
 
-        {/* Stat: Growth Rate */}
-        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 4' } }}>
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Growth Rate</Typography>
-            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>+12.5%</Typography>
+            <Typography variant="overline" color="text.secondary">Active Users</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{activeUsers}</Typography>
           </CardContent>
         </Card>
 
-        {/* Stat: Active Projects */}
-        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 4' } }}>
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Active Projects</Typography>
-            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>7</Typography>
+            <Typography variant="overline" color="text.secondary">Total Admins</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{adminCount}</Typography>
           </CardContent>
         </Card>
 
-        {/* Gauge: Completion Rate */}
-        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
-          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Typography variant="overline" color="text.secondary">Completion Rate</Typography>
-            <Gauge width={150} height={150} value={75} sx={{ mt: 1 }} />
-          </CardContent>
-        </Card>
-
-        {/* Gauge: Target Progress */}
-        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
-          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Typography variant="overline" color="text.secondary">Target Progress</Typography>
-            <Gauge width={150} height={150} value={50} valueMin={10} valueMax={60} sx={{ mt: 1 }} />
-          </CardContent>
-        </Card>
-
-        {/* Bar Chart */}
-        <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 8' } }}>
+        <Card sx={{ gridColumn: 'span 12' }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Quarterly Performance</Typography>
+            <Typography variant="overline" color="text.secondary">Monthly Report Graph</Typography>
             <Box sx={{ width: '100%', mt: 1 }}>
               <BarChart
-                series={quarterlyData}
+                series={[
+                  { data: monthlySignups, label: 'Signups' },
+                  { data: monthlyActive, label: 'Active Users' },
+                ]}
                 height={280}
-                xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band', label: 'Quarters' }]}
+                xAxis={[{ data: months, scaleType: 'band', label: 'Month' }]}
               />
             </Box>
           </CardContent>
         </Card>
 
-        {/* Pie Chart */}
-        <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
+        <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Distribution</Typography>
+            <Typography variant="overline" color="text.secondary">Report Category Share</Typography>
             <Box sx={{ width: '100%', mt: 1 }}>
               <PieChart
-                series={[{ data: distributionData }]}
+                series={[{ data: roleDistribution }]}
                 height={260}
               />
+            </Box>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
+          <CardContent>
+            <Typography variant="overline" color="text.secondary">User Breakdown</Typography>
+            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {[
+                { label: 'Admins', value: adminCount, color: '#8ed5ff' },
+                { label: 'Editors', value: editorCount, color: '#ffb74d' },
+                { label: 'Regular Users', value: userCount, color: '#81c784' },
+                { label: 'Inactive', value: totalUsers - activeUsers, color: '#e57373' },
+              ].map((item) => (
+                <Box key={item.label}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                    <Typography variant="body2" color="text.secondary">{item.label}</Typography>
+                    <Typography variant="body2" fontWeight={600}>{item.value}</Typography>
+                  </Box>
+                  <Box sx={{ height: 8, borderRadius: 4, bgcolor: 'action.hover', overflow: 'hidden' }}>
+                    <Box
+                      sx={{
+                        height: '100%',
+                        width: `${(item.value / totalUsers) * 100}%`,
+                        bgcolor: item.color,
+                        borderRadius: 4,
+                      }}
+                    />
+                  </Box>
+                </Box>
+              ))}
             </Box>
           </CardContent>
         </Card>
