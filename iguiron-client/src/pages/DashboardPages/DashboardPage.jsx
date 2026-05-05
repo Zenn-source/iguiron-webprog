@@ -1,44 +1,48 @@
-import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Gauge } from '@mui/x-charts/Gauge';
-import { Typography, Card, CardContent } from '@mui/material';
+import { Typography, Card, CardContent, Chip } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import usersData from '../../data/users.json';
+
+const totalUsers = usersData.length;
+const activeUsers = usersData.filter((u) => u.status === 'Active').length;
+const adminCount = usersData.filter((u) => u.role === 'Admin').length;
+const editorCount = usersData.filter((u) => u.role === 'Editor').length;
+const activeRate = Math.round((activeUsers / totalUsers) * 100);
+const adminRate = Math.round((adminCount / totalUsers) * 100);
+
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+const monthlySignups = [1, 2, 1, 2, 2, 2];
+
+const roleDistribution = [
+  { id: 0, value: adminCount, label: 'Admin' },
+  { id: 1, value: editorCount, label: 'Editor' },
+  { id: 2, value: usersData.filter((u) => u.role === 'User').length, label: 'User' },
+];
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'firstName', headerName: 'First name', width: 150, editable: true },
-  { field: 'lastName', headerName: 'Last name', width: 150, editable: true },
-  { field: 'age', headerName: 'Age', type: 'number', width: 110, editable: true },
+  { field: 'id', headerName: '#', width: 60 },
+  { field: 'firstName', headerName: 'First Name', width: 130 },
+  { field: 'lastName', headerName: 'Last Name', width: 130 },
+  { field: 'username', headerName: 'Username', width: 150 },
+  { field: 'role', headerName: 'Role', width: 110 },
   {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+    field: 'status',
+    headerName: 'Status',
+    width: 110,
+    renderCell: (params) => (
+      <Chip
+        label={params.value}
+        size="small"
+        color={params.value === 'Active' ? 'success' : 'error'}
+      />
+    ),
   },
 ];
-
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
-const avgAge = (
-  rows.reduce((sum, row) => sum + (row.age || 0), 0) /
-  rows.filter((row) => row.age !== null).length
-).toFixed(1);
 
 function DashboardPage() {
   return (
@@ -47,93 +51,93 @@ function DashboardPage() {
 
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 2 }}>
 
-        {/* Stat: Total Users */}
+        {/* Row 1: Stat cards */}
         <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
           <CardContent>
             <Typography variant="overline" color="text.secondary">Total Users</Typography>
-            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{rows.length}</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{totalUsers}</Typography>
           </CardContent>
         </Card>
 
-        {/* Stat: Average Age */}
         <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Average Age</Typography>
-            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{avgAge}</Typography>
+            <Typography variant="overline" color="text.secondary">Active Users</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{activeUsers}</Typography>
           </CardContent>
         </Card>
 
-        {/* Gauge 1 */}
         <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
-          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Typography variant="overline" color="text.secondary">Metric A</Typography>
-            <Gauge width={110} height={110} value={50} sx={{ mt: 1 }} />
+          <CardContent>
+            <Typography variant="overline" color="text.secondary">Admins</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{adminCount}</Typography>
           </CardContent>
         </Card>
 
-        {/* Gauge 2 */}
         <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
-          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Typography variant="overline" color="text.secondary">Metric B</Typography>
-            <Gauge width={110} height={110} value={50} valueMin={10} valueMax={60} sx={{ mt: 1 }} />
+          <CardContent>
+            <Typography variant="overline" color="text.secondary">Editors</Typography>
+            <Typography variant="h3" color="primary" sx={{ mt: 1 }}>{editorCount}</Typography>
           </CardContent>
         </Card>
 
-        {/* Bar Chart */}
+        {/* Row 2: Bar chart + Pie chart */}
         <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 8' } }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Quarterly Sales</Typography>
+            <Typography variant="overline" color="text.secondary">Monthly Signups</Typography>
             <Box sx={{ width: '100%', mt: 1 }}>
               <BarChart
-                series={[
-                  { data: [35, 44, 24, 34], label: 'Series 1' },
-                  { data: [51, 6, 49, 30], label: 'Series 2' },
-                ]}
+                series={[{ data: monthlySignups, label: 'Signups' }]}
                 height={260}
-                xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band', label: 'Quarters' }]}
+                xAxis={[{ data: months, scaleType: 'band', label: 'Month' }]}
               />
             </Box>
           </CardContent>
         </Card>
 
-        {/* Pie Chart */}
         <Card sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
           <CardContent>
-            <Typography variant="overline" color="text.secondary">Distribution</Typography>
+            <Typography variant="overline" color="text.secondary">Role Distribution</Typography>
             <Box sx={{ width: '100%', mt: 1 }}>
               <PieChart
-                series={[{
-                  data: [
-                    { id: 0, value: 10, label: 'Series A' },
-                    { id: 1, value: 15, label: 'Series B' },
-                    { id: 2, value: 20, label: 'Series C' },
-                  ],
-                }]}
+                series={[{ data: roleDistribution }]}
                 height={240}
               />
             </Box>
           </CardContent>
         </Card>
 
-        {/* DataGrid */}
+        {/* Row 3: Gauges */}
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
+          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography variant="overline" color="text.secondary">Active Rate %</Typography>
+            <Gauge width={110} height={110} value={activeRate} sx={{ mt: 1 }} />
+          </CardContent>
+        </Card>
+
+        <Card sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
+          <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography variant="overline" color="text.secondary">Admin Rate %</Typography>
+            <Gauge width={110} height={110} value={adminRate} sx={{ mt: 1 }} />
+          </CardContent>
+        </Card>
+
+        {/* Row 4: DataGrid (full width) */}
         <Card sx={{ gridColumn: 'span 12' }}>
           <CardContent>
             <Typography variant="overline" color="text.secondary">Users Overview</Typography>
             <Box sx={{ height: 400, width: '100%', mt: 1 }}>
               <DataGrid
-                rows={rows}
+                rows={usersData}
                 columns={columns}
-                experimentalFeatures={{ newEditingApi: true }}
                 initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
                 pageSizeOptions={[5]}
-                checkboxSelection
                 disableRowSelectionOnClick
               />
             </Box>
           </CardContent>
         </Card>
 
-        {/* Map */}
+        {/* Row 5: Map (full width) */}
         <Card sx={{ gridColumn: 'span 12' }}>
           <CardContent>
             <Typography variant="overline" color="text.secondary">Location Map</Typography>
