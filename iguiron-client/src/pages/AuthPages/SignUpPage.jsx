@@ -1,12 +1,66 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button";
 
 const inputClasses =
   "mt-2 w-full rounded-lg border border-[#3e484f] bg-[#060e20] px-4 py-3 text-sm text-[#dae2fd] outline-none transition placeholder:text-[#87929a] focus:border-[#8ed5ff]";
 
+const inputErrorClasses =
+  "mt-2 w-full rounded-lg border border-red-500 bg-[#060e20] px-4 py-3 text-sm text-[#dae2fd] outline-none transition placeholder:text-[#87929a] focus:border-red-400";
+
 const actionButtonClasses = "w-full py-3 text-sm";
 
 const SignUpPage = () => {
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    age: "",
+    contactNumber: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setForm((prev) => ({ ...prev, [id]: value }));
+    if (errors[id]) setErrors((prev) => ({ ...prev, [id]: "" }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!form.firstName.trim()) newErrors.firstName = "First name is required.";
+    if (!form.lastName.trim()) newErrors.lastName = "Last name is required.";
+    if (!form.username.trim()) {
+      newErrors.username = "Username is required.";
+    } else if (form.username.includes(" ")) {
+      newErrors.username = "Username must not contain spaces.";
+    }
+    if (!form.email.trim()) newErrors.email = "Email is required.";
+    if (form.password.length < 8)
+      newErrors.password = "Password must be at least 8 characters.";
+    if (!form.age.trim()) {
+      newErrors.age = "Age is required.";
+    } else if (!/^\d+$/.test(form.age) || parseInt(form.age) <= 0) {
+      newErrors.age = "Age must be a positive number.";
+    }
+    if (!/^\d{11}$/.test(form.contactNumber))
+      newErrors.contactNumber = "Contact number must be exactly 11 digits.";
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    console.log("Form submitted:", form);
+  };
+
   return (
     <>
       <h1 className="text-[40px] font-bold leading-[1.2] tracking-[-0.02em] text-[#dae2fd]">
@@ -16,89 +70,149 @@ const SignUpPage = () => {
         Create your account to get started.
       </p>
 
-      <form className="mt-8 space-y-5">
+      <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
-            <label
-              htmlFor="first-name"
-              className="text-sm font-medium text-[#bdc8d1]">
+            <label htmlFor="firstName" className="text-sm font-medium text-[#bdc8d1]">
               First Name
             </label>
             <input
-              id="first-name"
+              id="firstName"
               type="text"
               placeholder="Juan"
               autoComplete="given-name"
-              className={inputClasses}
+              value={form.firstName}
+              onChange={handleChange}
+              className={errors.firstName ? inputErrorClasses : inputClasses}
             />
+            {errors.firstName && (
+              <p className="mt-1 text-xs text-red-400">{errors.firstName}</p>
+            )}
           </div>
           <div>
-            <label
-              htmlFor="last-name"
-              className="text-sm font-medium text-[#bdc8d1]">
+            <label htmlFor="lastName" className="text-sm font-medium text-[#bdc8d1]">
               Last Name
             </label>
             <input
-              id="last-name"
+              id="lastName"
               type="text"
               placeholder="Dela Cruz"
               autoComplete="family-name"
-              className={inputClasses}
+              value={form.lastName}
+              onChange={handleChange}
+              className={errors.lastName ? inputErrorClasses : inputClasses}
             />
+            {errors.lastName && (
+              <p className="mt-1 text-xs text-red-400">{errors.lastName}</p>
+            )}
           </div>
         </div>
 
         <div>
-          <label
-            htmlFor="signup-email"
-            className="text-sm font-medium text-[#bdc8d1]">
-            Email
+          <label htmlFor="username" className="text-sm font-medium text-[#bdc8d1]">
+            Username
           </label>
           <input
-            id="signup-email"
-            type="email"
-            placeholder="juandelacruz@gmail.com"
-            autoComplete="email"
-            className={inputClasses}
+            id="username"
+            type="text"
+            placeholder="juandelacruz"
+            autoComplete="username"
+            value={form.username}
+            onChange={handleChange}
+            className={errors.username ? inputErrorClasses : inputClasses}
           />
+          {errors.username && (
+            <p className="mt-1 text-xs text-red-400">{errors.username}</p>
+          )}
         </div>
 
         <div>
-          <label
-            htmlFor="signup-password"
-            className="text-sm font-medium text-[#bdc8d1]">
+          <label htmlFor="email" className="text-sm font-medium text-[#bdc8d1]">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            placeholder="juandelacruz@gmail.com"
+            autoComplete="email"
+            value={form.email}
+            onChange={handleChange}
+            className={errors.email ? inputErrorClasses : inputClasses}
+          />
+          {errors.email && (
+            <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="password" className="text-sm font-medium text-[#bdc8d1]">
             Password
           </label>
           <input
-            id="signup-password"
+            id="password"
             type="password"
             placeholder="1234abcd!@#$"
             autoComplete="new-password"
-            className={inputClasses}
+            value={form.password}
+            onChange={handleChange}
+            className={errors.password ? inputErrorClasses : inputClasses}
           />
-          <p className="mt-2 text-xs leading-5 text-[#87929a]">
-            Use a secure password with letters, numbers, and symbols.
-          </p>
+          {errors.password ? (
+            <p className="mt-1 text-xs text-red-400">{errors.password}</p>
+          ) : (
+            <p className="mt-2 text-xs leading-5 text-[#87929a]">
+              Use a secure password with letters, numbers, and symbols.
+            </p>
+          )}
         </div>
 
-        <Button
-          type="submit"
-          variant="primary"
-          className={actionButtonClasses}>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="age" className="text-sm font-medium text-[#bdc8d1]">
+              Age
+            </label>
+            <input
+              id="age"
+              type="text"
+              placeholder="25"
+              inputMode="numeric"
+              value={form.age}
+              onChange={handleChange}
+              className={errors.age ? inputErrorClasses : inputClasses}
+            />
+            {errors.age && (
+              <p className="mt-1 text-xs text-red-400">{errors.age}</p>
+            )}
+          </div>
+          <div>
+            <label htmlFor="contactNumber" className="text-sm font-medium text-[#bdc8d1]">
+              Contact Number
+            </label>
+            <input
+              id="contactNumber"
+              type="text"
+              placeholder="09171234567"
+              inputMode="numeric"
+              maxLength={11}
+              value={form.contactNumber}
+              onChange={handleChange}
+              className={errors.contactNumber ? inputErrorClasses : inputClasses}
+            />
+            {errors.contactNumber && (
+              <p className="mt-1 text-xs text-red-400">{errors.contactNumber}</p>
+            )}
+          </div>
+        </div>
+
+        <Button type="submit" variant="primary" className={actionButtonClasses}>
           Create Account
         </Button>
 
         <div className="grid gap-3 pt-2 sm:grid-cols-2">
-          <Button
-            type="button"
-            variant="secondary"
-            className={actionButtonClasses}>
+          <Button type="button" variant="secondary" className={actionButtonClasses}>
             Sign Up with Google
           </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            className={actionButtonClasses}>
+          <Button type="button" variant="secondary" className={actionButtonClasses}>
             Sign Up with Apple
           </Button>
         </div>
