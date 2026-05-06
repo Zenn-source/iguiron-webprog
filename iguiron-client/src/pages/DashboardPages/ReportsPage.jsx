@@ -15,9 +15,9 @@ const adminCount = usersData.filter((u) => u.role === 'Admin').length;
 const editorCount = usersData.filter((u) => u.role === 'Editor').length;
 const userCount = usersData.filter((u) => u.role === 'User').length;
 
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-const monthlySignups = [1, 2, 1, 2, 2, 2];
-const monthlyActive = [1, 1, 1, 2, 1, 2];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+const monthlySignups = [1, 2, 5, 2, 4, 2, 4];
+const monthlyActive = [1, 1, 4, 2, 3, 2, 2];
 
 const roleDistribution = [
   { id: 0, value: adminCount, label: 'Admin' },
