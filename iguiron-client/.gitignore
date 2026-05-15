@@ -23,4 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3334fe2 (Connect client to REST API and add articles dashboard)
