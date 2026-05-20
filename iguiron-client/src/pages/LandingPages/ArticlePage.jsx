@@ -1,10 +1,30 @@
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../../components/Button.jsx";
-import articles from "../../data/article-content.js";
+import ArticleService from "../../services/ArticleService.js";
 
 function ArticlePage() {
-  const { name } = useParams();
-  const article = articles.find((article) => article.name === name);
+  const { slug } = useParams();
+  const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    ArticleService.getArticleBySlug(slug)
+      .then(setArticle)
+      .finally(() => setLoading(false));
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="flex w-full flex-col gap-6">
+        <section className="border-y border-[#3e484f] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+          <div className="mx-auto max-w-3xl">
+            <p className="text-sm text-[#87929a]">Loading…</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   if (!article) {
     return (
@@ -39,7 +59,7 @@ function ArticlePage() {
             {article.title}
           </h1>
           <p className="mt-2 text-sm text-[#87929a]">
-            {article.name
+            {article.slug
               .split("-")
               .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
               .join(" ")}
@@ -49,11 +69,13 @@ function ArticlePage() {
 
       <section className="px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <img
-            src={article.image}
-            alt={article.title}
-            className="mb-8 w-full rounded-2xl object-cover"
-          />
+          {article.image && (
+            <img
+              src={article.image}
+              alt={article.title}
+              className="mb-8 w-full rounded-2xl object-cover"
+            />
+          )}
 
           <div className="space-y-4">
             {article.content.map((paragraph, index) => (
