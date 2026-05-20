@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
+import UserService from "../../services/UserService";
 
 const inputClasses =
   "mt-2 w-full rounded-lg border border-[#3e484f] bg-[#060e20] px-4 py-3 text-sm text-[#dae2fd] outline-none transition placeholder:text-[#87929a] focus:border-[#8ed5ff]";
@@ -7,6 +9,33 @@ const inputClasses =
 const actionButtonClasses = "w-full py-3 text-sm";
 
 const SignInPage = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!email.trim() || !password.trim()) {
+      setError("Email and password are required.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const data = await UserService.login(email, password);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("firstName", data.user.firstName);
+      localStorage.setItem("userType", data.user.type);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <h1 className="text-[40px] font-bold leading-[1.2] tracking-[-0.02em] text-[#dae2fd]">
@@ -16,7 +45,13 @@ const SignInPage = () => {
         Access your account to manage your projects and articles.
       </p>
 
-      <form className="mt-8 space-y-5">
+      <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+        {error && (
+          <p className="rounded-lg border border-red-500 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            {error}
+          </p>
+        )}
+
         <div>
           <label
             htmlFor="signin-email"
@@ -28,6 +63,8 @@ const SignInPage = () => {
             type="email"
             placeholder="juandelacruz@gmail.com"
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className={inputClasses}
           />
         </div>
@@ -43,6 +80,8 @@ const SignInPage = () => {
             type="password"
             placeholder="1234abcd!@#$"
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className={inputClasses}
           />
           <p className="mt-2 text-xs leading-5 text-[#87929a]">
@@ -68,8 +107,9 @@ const SignInPage = () => {
         <Button
           type="submit"
           variant="primary"
-          className={actionButtonClasses}>
-          Log In
+          className={actionButtonClasses}
+          disabled={loading}>
+          {loading ? "Logging in…" : "Log In"}
         </Button>
 
         <div className="grid gap-3 pt-2 sm:grid-cols-2">
