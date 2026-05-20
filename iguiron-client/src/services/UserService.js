@@ -17,12 +17,13 @@ function fromApi(user) {
 
 function toApi(formData) {
   const { role, status, id, ...rest } = formData;
-  return {
+  const result = {
     ...rest,
     type: ROLE_TO_TYPE[role] ?? role,
-    isActive: status === 'Active',
     age: rest.age ? Number(rest.age) : undefined,
   };
+  if (status !== undefined) result.isActive = status === 'Active';
+  return result;
 }
 
 function authHeader() {
@@ -35,7 +36,7 @@ const UserService = {
     axios.get(BASE, { headers: authHeader() }).then((r) => r.data.map(fromApi)),
 
   createUser: (data) =>
-    axios.post(BASE, data).then((r) => r.data),
+    axios.post(BASE, toApi(data), { headers: authHeader() }).then((r) => r.data),
 
   updateUser: (id, data) =>
     axios.put(`${BASE}/${id}`, toApi(data), { headers: authHeader() }).then((r) => r.data),
