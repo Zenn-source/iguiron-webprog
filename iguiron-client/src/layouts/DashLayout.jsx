@@ -86,6 +86,12 @@ const dashboardNavItems = [
     to: "/dashboard/users",
     icon: PeopleIcon,
   },
+  {
+    label: "Articles",
+    title: "Articles",
+    to: "/dashboard/articles",
+    icon: ArticleIcon,
+  },
 ];
 
 const openedMixin = (theme) => ({
@@ -211,7 +217,12 @@ const DashLayout = () => {
     setOpen(false);
   };
 
+  const firstName = localStorage.getItem("firstName");
+
   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("userType");
     navigate("/");
   };
 
@@ -240,7 +251,7 @@ const DashLayout = () => {
             component="div"
             sx={{ flexGrow: 1 }}
           >
-            {pageTitle}
+            {firstName ? `Welcome, ${firstName}` : pageTitle}
           </Typography>
           {/* Search */}
           <Search>
