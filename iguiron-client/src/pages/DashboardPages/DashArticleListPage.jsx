@@ -6,6 +6,10 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -22,7 +26,7 @@ import ArticleService from "../../services/ArticleService";
 const emptyForm = {
   title: "",
   slug: "",
-  content: [""],
+  content: "",
   image: "",
   isActive: true,
 };
@@ -38,20 +42,40 @@ function slugify(text) {
 function validate(formData) {
   const errors = {};
   if (!formData.title.trim()) errors.title = "Title is required.";
-  if (!formData.slug.trim()) errors.slug = "Slug is required.";
+  if (!formData.slug.trim()) {
+    errors.slug = "Slug is required.";
+  } else if (/\s/.test(formData.slug)) {
+    errors.slug = "Slug must not contain spaces.";
+  }
   return errors;
 }
 
-function ArticleFormFields({ formData, onChange, errors = {} }) {
-  const handleContentChange = (value) => {
-    onChange("content", [value]);
+function formToApi(formData) {
+  return {
+    title: formData.title.trim(),
+    slug: formData.slug.trim(),
+    content: formData.content
+      ? formData.content.split("\n").filter((line) => line.trim())
+      : [],
+    image: formData.image.trim() || undefined,
+    isActive: formData.isActive,
   };
+}
 
+function apiToForm(article) {
+  return {
+    title: article.title,
+    slug: article.slug,
+    content: Array.isArray(article.content) ? article.content.join("\n") : "",
+    image: article.image || "",
+    isActive: article.isActive,
+  };
+}
+
+function ArticleFormFields({ formData, onChange, errors = {}, isEdit = false }) {
   const handleTitleChange = (value) => {
     onChange("title", value);
-    if (!formData.slug) {
-      onChange("slug", slugify(value));
-    }
+    if (!isEdit) onChange("slug", slugify(value));
   };
 
   return (
@@ -68,27 +92,28 @@ function ArticleFormFields({ formData, onChange, errors = {} }) {
       <TextField
         label="Slug"
         value={formData.slug}
-        onChange={(e) => onChange("slug", slugify(e.target.value))}
+        onChange={(e) => onChange("slug", e.target.value)}
         required
         fullWidth
         error={!!errors.slug}
-        helperText={errors.slug || "URL-friendly identifier (auto-generated from title)"}
+        helperText={errors.slug || "Used in the article URL (no spaces)"}
       />
       <TextField
-        label="Content (first paragraph)"
-        value={formData.content[0] || ""}
-        onChange={(e) => handleContentChange(e.target.value)}
+        label="Content"
+        value={formData.content}
+        onChange={(e) => onChange("content", e.target.value)}
         multiline
-        rows={4}
+        rows={6}
         fullWidth
-        placeholder="Enter the article content…"
+        placeholder="Write your article content here…"
+        helperText="Each line becomes a paragraph."
       />
       <TextField
         label="Image URL"
         value={formData.image}
         onChange={(e) => onChange("image", e.target.value)}
         fullWidth
-        placeholder="/images/article.png"
+        placeholder="https://example.com/image.jpg"
       />
       <FormControlLabel
         control={
@@ -110,6 +135,7 @@ function DashArticleListPage() {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -135,40 +161,30 @@ function DashArticleListPage() {
     loadArticles();
   }, []);
 
-  const filteredArticles = articles.filter((a) => {
+  const filteredArticles = articles.filter((article) => {
     const q = searchQuery.toLowerCase();
-    return (
+    const matchesSearch =
       !q ||
-      a.title.toLowerCase().includes(q) ||
-      a.slug.toLowerCase().includes(q)
-    );
+      article.title.toLowerCase().includes(q) ||
+      article.slug.toLowerCase().includes(q);
+    const matchesStatus =
+      statusFilter === "All" ||
+      (statusFilter === "Active" && article.isActive) ||
+      (statusFilter === "Inactive" && !article.isActive);
+    return matchesSearch && matchesStatus;
   });
 
   const columns = [
     {
       field: "rowNum",
       headerName: "ID",
-      width: 70,
+      width: 60,
       sortable: false,
       renderCell: (params) =>
         filteredArticles.findIndex((a) => a._id === params.id) + 1,
     },
+    { field: "title", headerName: "Title", width: 240 },
     { field: "slug", headerName: "Slug", width: 200 },
-    { field: "title", headerName: "Title", width: 220 },
-    {
-      field: "paragraphs",
-      headerName: "Paragraphs",
-      width: 110,
-      valueGetter: (_value, row) => row.content?.length ?? 0,
-    },
-    {
-      field: "preview",
-      headerName: "Preview",
-      width: 260,
-      sortable: false,
-      valueGetter: (_value, row) =>
-        row.content?.[0]?.slice(0, 80) ?? "",
-    },
     {
       field: "isActive",
       headerName: "Status",
@@ -181,6 +197,13 @@ function DashArticleListPage() {
           color={params.value ? "success" : "error"}
         />
       ),
+    },
+    {
+      field: "createdAt",
+      headerName: "Created",
+      width: 130,
+      valueFormatter: (value) =>
+        value ? new Date(value).toLocaleDateString() : "",
     },
     {
       field: "actions",
@@ -218,7 +241,7 @@ function DashArticleListPage() {
   }
 
   function handleEditOpen(article) {
-    setSelectedArticle({ ...article });
+    setSelectedArticle({ ...article, ...apiToForm(article) });
     setEditErrors({});
     setEditModalOpen(true);
   }
@@ -231,9 +254,7 @@ function DashArticleListPage() {
 
   function handleEditChange(field, value) {
     setSelectedArticle((prev) => ({ ...prev, [field]: value }));
-    if (editErrors[field]) {
-      setEditErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
+    if (editErrors[field]) setEditErrors((prev) => ({ ...prev, [field]: undefined }));
   }
 
   async function handleEditSave() {
@@ -243,19 +264,17 @@ function DashArticleListPage() {
       return;
     }
     try {
-      await ArticleService.updateArticle(selectedArticle._id, selectedArticle);
+      await ArticleService.updateArticle(selectedArticle._id, formToApi(selectedArticle));
       await loadArticles();
       handleEditClose();
-    } catch {
-      setApiError("Failed to update article.");
+    } catch (err) {
+      setApiError(err.response?.data?.message || "Failed to update article.");
     }
   }
 
   function handleAddChange(field, value) {
     setAddFormData((prev) => ({ ...prev, [field]: value }));
-    if (addErrors[field]) {
-      setAddErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
+    if (addErrors[field]) setAddErrors((prev) => ({ ...prev, [field]: undefined }));
   }
 
   function handleAddClose() {
@@ -271,7 +290,7 @@ function DashArticleListPage() {
       return;
     }
     try {
-      await ArticleService.createArticle(addFormData);
+      await ArticleService.createArticle(formToApi(addFormData));
       await loadArticles();
       handleAddClose();
     } catch (err) {
@@ -302,13 +321,13 @@ function DashArticleListPage() {
 
       <Card>
         <CardContent>
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
             <TextField
-              placeholder="Search articles…"
+              placeholder="Search by title or slug…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               size="small"
-              sx={{ minWidth: 280 }}
+              sx={{ flexGrow: 1, minWidth: 220 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -317,6 +336,18 @@ function DashArticleListPage() {
                 ),
               }}
             />
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <InputLabel id="status-filter-label">Status</InputLabel>
+              <Select
+                labelId="status-filter-label"
+                label="Status"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}>
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
 
           {loading ? (
@@ -330,9 +361,9 @@ function DashArticleListPage() {
                 columns={columns}
                 getRowId={(row) => row._id}
                 initialState={{
-                  pagination: { paginationModel: { pageSize: 10 } },
+                  pagination: { paginationModel: { pageSize: 8 } },
                 }}
-                pageSizeOptions={[10, 20]}
+                pageSizeOptions={[8, 15]}
                 disableRowSelectionOnClick
               />
             </Box>
@@ -367,6 +398,7 @@ function DashArticleListPage() {
               formData={selectedArticle}
               onChange={handleEditChange}
               errors={editErrors}
+              isEdit
             />
           </DialogContent>
           <DialogActions>
