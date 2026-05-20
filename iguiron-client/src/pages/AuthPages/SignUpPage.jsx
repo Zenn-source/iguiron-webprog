@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
+import UserService from "../../services/UserService";
 
 const inputClasses =
   "mt-2 w-full rounded-lg border border-[#3e484f] bg-[#060e20] px-4 py-3 text-sm text-[#dae2fd] outline-none transition placeholder:text-[#87929a] focus:border-[#8ed5ff]";
@@ -11,6 +12,7 @@ const inputErrorClasses =
 const actionButtonClasses = "w-full py-3 text-sm";
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -22,6 +24,8 @@ const SignUpPage = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -51,14 +55,28 @@ const SignUpPage = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    console.log("Form submitted:", form);
+    setApiError("");
+    setLoading(true);
+    try {
+      await UserService.createUser({
+        ...form,
+        age: Number(form.age),
+      });
+      navigate("/auth/signin");
+    } catch (err) {
+      setApiError(
+        err.response?.data?.message || "Failed to create account. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,6 +89,12 @@ const SignUpPage = () => {
       </p>
 
       <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+        {apiError && (
+          <p className="rounded-lg border border-red-500 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            {apiError}
+          </p>
+        )}
+
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="firstName" className="text-sm font-medium text-[#bdc8d1]">
@@ -204,8 +228,12 @@ const SignUpPage = () => {
           </div>
         </div>
 
-        <Button type="submit" variant="primary" className={actionButtonClasses}>
-          Create Account
+        <Button
+          type="submit"
+          variant="primary"
+          className={actionButtonClasses}
+          disabled={loading}>
+          {loading ? "Creating account…" : "Create Account"}
         </Button>
 
         <div className="grid gap-3 pt-2 sm:grid-cols-2">
